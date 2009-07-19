@@ -14,7 +14,7 @@ in an article he wrote called
 <a href="http://www.searchcowboys.com/columns/764">Comment links: an experiment</a>.
 It all started when Matt Cutts talked about how Google changed how it handles no
 follow links in his article on
-<a href="it's http://www.mattcutts.com/blog/pagerank-sculpting/">PageRank Sculpting</a>.
+<a href="http://www.mattcutts.com/blog/pagerank-sculpting/">PageRank Sculpting</a>.
 
 No one knows for sure yet if this will be beneficial or not, but for those that
 want to be on the cutting edge and try this experiment for themselves, this

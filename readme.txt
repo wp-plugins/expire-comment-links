@@ -3,8 +3,8 @@ Contributors: aaroncampbell
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_xclick&business=paypal%40xavisys%2ecom&item_name=Expire%20Comment%20Links&no_shipping=0&no_note=1&tax=0&currency_code=USD&lc=US&bn=PP%2dDonationsBF&charset=UTF%2d8
 Tags: seo, comments, search engines, google
 Requires at least: 2.8
-Tested up to: 2.8.1
-Stable tag: 0.1.0
+Tested up to: 2.9
+Stable tag: 0.1.1
 
 Allows you to stop displaying links for old comments. PHP 5+ required.
 
@@ -39,6 +39,9 @@ Search Engine Optimation expert, but this method is currently an unproven
 experiment.
 
 == Changelog ==
+
+= 0.1.1 =
+* Removed the optional anonymous statistics collection.  Nothing is ever collected anymore.
 
 = 0.1.0 =
 * First version released to wordpress.org

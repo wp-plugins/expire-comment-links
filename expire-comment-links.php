@@ -3,7 +3,7 @@
  * Plugin Name: Expire Comment Links
  * Plugin URI: http://xavisys.com/2009/07/expire-comment-links/
  * Description: Allows you to stop displaying links for old comments. PHP 5+ required.
- * Version: 0.1.0
+ * Version: 0.1.1
  * Author: Aaron D. Campbell
  * Author URI: http://xavisys.com/
  */
@@ -114,21 +114,6 @@ class expireCommentLinks {
 							</select>
 						</td>
 					</tr>
-					<tr valign="top">
-						<th scope="row">
-							<a title="<?php _e('Click for Help!', 'expire_comment_links'); ?>" href="#" onclick="jQuery('#ecl_send_sys_info_help').toggle(); return false;">
-								<?php _e('System Information:', 'expire_comment_links') ?>
-							</a>
-						</th>
-						<td>
-							<input type="hidden" name="ecl[send_sys_info]" value="false" />
-							<label for="ecl_send_sys_info"><input type="checkbox" name="ecl[send_sys_info]" value="true" id="ecl_send_sys_info"<?php checked('true', $this->_settings['send_sys_info']); ?> /> <?php _e('I agree to send anonymous system information', 'expire_comment_links'); ?></label><br />
-							<small id="ecl_send_sys_info_help" style="display:none;">
-								<?php _e('You can help by sending anonymous system information that will help Xavisys make better decisions about new features.', 'expire_comment_links'); ?><br />
-								<?php _e('The information will be sent anonymously, but a unique identifier will be sent to prevent duplicate entries from the same installation.', 'expire_comment_links'); ?>
-							</small>
-						</td>
-					</tr>
 				</table>
 				<p class="submit">
 					<input type="submit" name="Submit" value="<?php _e('Update Options &raquo;', 'expire_comment_links'); ?>" />
@@ -138,55 +123,6 @@ class expireCommentLinks {
 <?php
 	}
 
-	/**
-	 * if user agrees to send system information and the last sent info is
-	 * outdated then send the stats
-	 */
-	public function sendSysInfo() {
-		$this->_getSettings();
-		if ($this->_settings['send_sys_info'] == 'true') {
-			$lastSent = $this->_settings['sysinfo'];
-            $sysinfo = $this->_get_sysinfo();
-			if (serialize($lastSent) != serialize($sysinfo)) {
-				$this->_settings['sysinfo'] = $sysinfo;
-				$params = array(
-					'method'	=> 'POST',
-					'blocking'	=> false,
-					'body'		=> $sysinfo,
-				);
-				$resp = wp_remote_request( 'http://xavisys.com/plugin-info.php', $params );
-				$this->_updateSettings();
-			}
-		}
-	}
-
-	private function _get_sysinfo() {
-		global $wpdb;
-		$pluginData = get_plugin_data(__FILE__);
-		$s = array();
-		$s['plugin'] = $pluginData['Name'];
-		$s['id'] = $this->_get_id($pluginData['Name']);
-		$s['version'] = $pluginData['Version'];
-
-		$s['php_version'] = phpversion();
-		$s['mysql_version'] = @mysql_get_server_info($wpdb->dbh);
-		$s['server_software'] = $_SERVER["SERVER_SOFTWARE"];
-		$s['memory_limit'] = ini_get('memory_limit');
-
-		return $s;
-	}
-
-	private function _get_id($name) {
-		$this->_getSettings();
-		if ( empty($this->_settings['sysinfo-id']) ) {
-			$this->_settings['sysinfo-id'] = sha1( get_bloginfo('url') . $name );
-			$this->_updateSettings();
-		}
-		return $this->_settings['sysinfo-id'];
-	}
-	private function _updateSettings() {
-		update_option('ecl', $this->_settings);
-	}
 	private function _getSettings() {
 		$defaults = array(
 			'expire_period'			=> '2',

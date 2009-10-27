@@ -4,7 +4,7 @@ Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_xclick&business=paypal%4
 Tags: seo, comments, search engines, google
 Requires at least: 2.8
 Tested up to: 2.9
-Stable tag: 0.1.1
+Stable tag: 0.1.2
 
 Allows you to stop displaying links for old comments. PHP 5+ required.
 
@@ -39,6 +39,10 @@ Search Engine Optimation expert, but this method is currently an unproven
 experiment.
 
 == Changelog ==
+
+= 0.1.2 =
+* Move actions to __construct
+* Fix sysinfo error
 
 = 0.1.1 =
 * Removed the optional anonymous statistics collection.  Nothing is ever collected anymore.

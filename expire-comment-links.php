@@ -3,7 +3,7 @@
  * Plugin Name: Expire Comment Links
  * Plugin URI: http://xavisys.com/2009/07/expire-comment-links/
  * Description: Allows you to stop displaying links for old comments. PHP 5+ required.
- * Version: 0.1.1
+ * Version: 0.1.2
  * Author: Aaron D. Campbell
  * Author URI: http://xavisys.com/
  */
@@ -28,6 +28,20 @@ class expireCommentLinks {
 	private $_reposUrl = 'http://plugins.svn.wordpress.org/';
 
 	public function __construct() {
+		/**
+		 * Add filters and actions
+		 */
+		add_action( 'admin_menu', array( $this,'admin_menu' ) );
+		add_action( 'admin_init', array( $this, 'registerOptions' ) );
+		add_filter( 'init', array( $this, 'init_locale') );
+		add_filter( 'get_comment_author_url', array( $this, 'commentAuthorLinkFilter' ) );
+		add_filter( 'get_comment_author', array( $this, 'commentAuthorFilter' ) );
+		add_filter( 'plugin_action_links', array( $this, 'addSettingLink' ), 10, 2 );
+		add_filter( 'comment_text', array( $this, 'processCommentText' ), 8);
+		if ( $pri = has_filter('comment_text', 'make_clickable') ) {
+			remove_filter ('comment_text', 'make_clickable', $pri);
+		}
+
 		/**
 		 * Add update messages that can be attached to the CURRENT release (not
 		 * this one), but only for 2.8+
@@ -188,31 +202,3 @@ class expireCommentLinks {
 
 // Instantiate our class
 $expireCommentLinks = new expireCommentLinks();
-
-/**
- * Add filters and actions
- */
-add_action( 'admin_menu', array($expireCommentLinks,'admin_menu') );
-add_action( 'admin_init', array( $expireCommentLinks, 'registerOptions' ) );
-add_filter( 'admin_init', array( $expireCommentLinks, 'sendSysInfo') );
-add_filter( 'init', array( $expireCommentLinks, 'init_locale') );
-add_filter( 'get_comment_author_url', array( $expireCommentLinks, 'commentAuthorLinkFilter' ) );
-add_filter( 'get_comment_author', array( $expireCommentLinks, 'commentAuthorFilter' ) );
-add_filter( 'plugin_action_links', array( $expireCommentLinks, 'addSettingLink' ), 10, 2 );
-add_filter( 'comment_text', array( $expireCommentLinks, 'processCommentText' ), 8);
-if ( $pri = has_filter('comment_text', 'make_clickable') ) {
-	remove_filter ('comment_text', 'make_clickable', $pri);
-}
-
-/**
- * For use with debugging
- * @todo Remove this
- */
-if ( !function_exists('dump') ) {
-	function dump($v, $title = '') {
-		if (!empty($title)) {
-			echo '<h4>' . htmlentities($title) . '</h4>';
-		}
-		echo '<pre>' . htmlentities(print_r($v, true)) . '</pre>';
-	}
-}
